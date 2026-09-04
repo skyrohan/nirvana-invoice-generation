@@ -1,0 +1,144 @@
+<div class="app-shell">
+  <!-- Top Navigation Bar (Hidden during print) -->
+  <header class="app-header no-print">
+    <div class="header-inner">
+      
+      <!-- Brand & Resort Title -->
+      <div class="brand-identity">
+        <div class="header-logo-badge">
+          <img [src]="logoBase64" alt="Nirvana Logo" class="nav-logo-img" />
+        </div>
+        <div class="header-titles">
+          <div class="brand-row">
+            <h1 class="nav-resort-name">NIRVANA RESORT</h1>
+            <span class="pro-tag">INVOICE SUITE</span>
+          </div>
+          <span class="nav-tagline">Manager Invoice & PDF Generation Portal</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions Header Controls -->
+      <div class="header-actions">
+        <!-- Sample Example Quick-loader -->
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm"
+          (click)="resetExample()"
+          title="Load User Example: Aishwarya Aghav booking"
+        >
+          <span>✨</span>
+          <span>Load Example</span>
+        </button>
+
+        <!-- New Blank -->
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm"
+          (click)="newInvoice()"
+          title="Create a fresh new invoice"
+        >
+          <span>📄</span>
+          <span>New</span>
+        </button>
+
+        <!-- Save Invoice -->
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm"
+          (click)="saveCurrent()"
+          title="Save invoice to local history"
+        >
+          <span>💾</span>
+          <span>Save</span>
+        </button>
+
+        <!-- View History -->
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-sm"
+          (click)="showHistory = true"
+          title="View recent invoices"
+        >
+          <span>📂</span>
+          <span>History ({{ invoiceService.getHistory().length }})</span>
+        </button>
+
+        <!-- WhatsApp Quick Share -->
+        <a 
+          [href]="invoiceService.getWhatsAppShareUrl()" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn btn-whatsapp btn-sm"
+          title="Direct WhatsApp summary to guest"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.983.541 1.776.814 2.791.814 3.179 0 5.766-2.587 5.766-5.766 0-3.18-2.587-5.766-5.766-5.766zm9.969 5.766c0 5.518-4.482 10-10 10-1.748 0-3.414-.46-4.887-1.309l-7.113 1.871 1.889-6.945c-.933-1.524-1.449-3.287-1.449-5.117 0-5.518 4.482-10 10-10s10 4.482 10 10z"/>
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <!-- Gmail Direct Compose -->
+        <a 
+          [href]="invoiceService.getGmailComposeUrl()" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn btn-secondary btn-sm"
+          title="Open Gmail compose with booking details pre-filled"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#EA4335">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          <span>Gmail</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Mobile View Segmented Switcher (Visible only on tablets & mobile screens) -->
+    <div class="mobile-tabs-container">
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="activeTab === 'edit'"
+        (click)="activeTab = 'edit'"
+      >
+        ✏️ Edit Booking Form
+      </button>
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="activeTab === 'preview'"
+        (click)="activeTab = 'preview'"
+      >
+        📄 View & Download PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace: Split-Screen Layout -->
+  <main class="workspace-layout">
+    
+    <!-- Left Pane: Editor Console -->
+    <section 
+      class="editor-pane"
+      [class.mobile-hidden]="activeTab !== 'edit'"
+    >
+      <app-invoice-editor></app-invoice-editor>
+    </section>
+
+    <!-- Right Pane: Live A4 PDF Preview -->
+    <section 
+      class="preview-pane"
+      [class.mobile-hidden]="activeTab !== 'preview'"
+    >
+      <app-invoice-preview></app-invoice-preview>
+    </section>
+
+  </main>
+
+  <!-- History Drawer Modal -->
+  <app-history-drawer 
+    *ngIf="showHistory" 
+    (close)="showHistory = false"
+  ></app-history-drawer>
+</div>
